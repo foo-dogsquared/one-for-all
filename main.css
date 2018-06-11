@@ -1,0 +1,124 @@
+*::after {
+  box-sizing: content-box;
+}
+
+html,
+body {
+  font-family: "PT Sans Narrow", "Open Sans Condensed", "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body.layout {
+  display: grid;
+  grid-template-areas: "header" "main" "footer";
+  grid-template-rows: auto 1fr auto;
+  font-size: 16px;
+  height: 100%;
+}
+
+header,
+footer {
+  background: linear-gradient(45deg, #5b210f, #b3411d, #dc5227);
+  color: white;
+  height: auto;
+  padding: 20px;
+}
+
+header *,
+footer * {
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  grid-area: header;
+}
+
+main {
+  grid-area: main;
+}
+
+footer {
+  grid-area: footer;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.wrapper {
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+header > .wrapper,
+footer > .wrapper {
+  height: 100%;
+}
+
+.wrapper.header {
+  align-items: center;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+.wrapper.main {
+  padding: 20px;
+}
+
+.wrapper.main ul#search-list {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.wrapper.main ul#search-list li.search-engine {
+  margin-bottom: 20px;
+}
+
+.wrapper.main ul#search-list li.search-engine div.search-engine-name > label {
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  margin: 0;
+  padding: 0;
+}
+
+.wrapper.main ul#search-list li.search-engine div.search-engine-input-item {
+  border: 1px solid black;
+  display: grid;
+  font-size: 16px;
+  grid-gap: 0;
+  grid-template-areas: "input button";
+  grid-template-columns: 1fr 10%;
+}
+
+.wrapper.main ul#search-list li.search-engine div.search-engine-input-item input.search-engine-input {
+  background: transparent;
+  border: 0;
+  grid-area: input;
+  padding: .5em;
+}
+
+.wrapper.main ul#search-list li.search-engine div.search-engine-input-item input.search-engine-input:focus {
+  background: #f8dfd7;
+}
+
+.wrapper.main ul#search-list li.search-engine div.search-engine-input-item button.search-engine-input-button {
+  background: transparent;
+  border: 0;
+  border-left: 1px solid black;
+  grid-area: button;
+}
+
+.wrapper.main ul#search-list li.search-engine div.search-engine-input-item button.search-engine-input-button:hover {
+  cursor: pointer;
+  background: #f1bcab;
+}
+/*# sourceMappingURL=main.css.map */
