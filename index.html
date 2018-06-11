@@ -21,13 +21,29 @@
     </header>
     <main>
         <div id="list-container" class="wrapper main">
+            <div id="database-url-input-section">
+                <div class="database-url-desc">Input the location of the <code>se-list.json</code> file that contains
+                the list of the search engine with the needed data (if none, the default database will be used)</div>
+                <div id="database-url-input-grid">
+                    <input id="dbUrlInput">
+                    <button id="dbUrlSearch"></button>
+                </div>
+                <hr color="transparent">
+            </div>
+
+            <ul id="search-list">
+            </ul>
         </div>
     </main>
     <footer>
         <div class="wrapper footer">
             <span>Coded by <a class="username" href="https://github.com/foo-dogsquared">Gabriel Arazas</a></span>
+            <span>© <span id="currentYear"></span></span>
         </div>
     </footer>
-    <script src="main.js"></script>
+    <script src="main.js" async></script>
+    <script>
+        document.querySelector("#currentYear").textContent = new Date().getFullYear();
+    </script>
 </body>
 </html>
