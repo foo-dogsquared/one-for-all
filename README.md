@@ -2,7 +2,6 @@
 A single web page for most of the popular search engines.
 
 Well, not the one of the most elegant solution but it works and there are still some things I want to implement someday. So expect this to be improved... someday (still not close to elegance, though). 😂
-
 ## List of available search engines so far:
 - cdnjs
 - DevDocs
@@ -39,3 +38,4 @@ You can fork this one and adjust the array of objects to whatever you desire. Ju
     - https://duckduckgo.com/?q=SEARCH_TREM
     - https://youtube.com/results?q=foo-dogsquared
     - https://gitlab.com/search?search=SEARCH_MRET (it has `"search"` as the value)
+
