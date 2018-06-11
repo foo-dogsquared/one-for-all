@@ -1,0 +1,59 @@
+[
+  {
+    "id": "cdnjs",
+    "name": "cdnjs",
+    "url": "https://cdnjs.com/"
+  },
+  {
+    "id": "devdocs",
+    "name": "DevDocs",
+    "url": "https://devdocs.io/search"
+  },
+  {
+    "id": "duckduckgo",
+    "name": "DuckDuckGo",
+    "url": "https://duckduckgo.com/"
+  },
+  {
+    "id": "github",
+    "name": "GitHub",
+    "url": "https://github.com/search"
+  },
+  {
+    "id": "gitlab",
+    "name": "GitLab",
+    "url": "https://gitlab.com/search",
+    "param": "search"
+  },
+  {
+    "id": "google",
+    "name": "Google",
+    "url": "https://google.com/search"
+  },
+  {
+    "id": "linkedin",
+    "name": "LinkedIn",
+    "url": "https://linkedin.com/search/results/index/",
+    "param": "keywords"
+  },
+  {
+    "id": "mdn",
+    "name": "MDN Web Docs",
+    "url": "https://developer.mozilla.org/en-US/search"
+  },
+  {
+    "id": "npm",
+    "name": "npm Package Search",
+    "url": "https://npmjs.com/search"
+  },
+  {
+    "id": "stackoverflow",
+    "name": "Stack Overflow",
+    "url": "https://stackoverflow.com/search"
+  },
+  {
+    "id": "youtube",
+    "name": "YouTube",
+    "url": "https://youtube.com/results"
+  }
+]
