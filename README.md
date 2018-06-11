@@ -38,4 +38,3 @@ You can fork this one and adjust the array of objects to whatever you desire. Ju
     - https://duckduckgo.com/?q=SEARCH_TREM
     - https://youtube.com/results?q=foo-dogsquared
     - https://gitlab.com/search?search=SEARCH_MRET (it has `"search"` as the value)
-
