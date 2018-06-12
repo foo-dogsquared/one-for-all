@@ -10,7 +10,7 @@ body {
   padding: 0;
 }
 
-body.layout {
+body.plain-grid-layout {
   display: grid;
   grid-template-areas: "header" "main" "footer";
   grid-template-rows: auto 1fr auto;
@@ -44,6 +44,11 @@ footer {
   grid-area: footer;
 }
 
+hr {
+  border-top: 2px dashed black;
+  margin: 2em auto;
+}
+
 a {
   color: white;
   text-decoration: none;
@@ -67,11 +72,55 @@ footer > .wrapper {
   align-items: center;
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-around;
+  justify-content: space-between;
+}
+
+.wrapper.header p.app-description {
+  font-family: "Source Sans Pro", "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 .wrapper.main {
   padding: 20px;
+}
+
+.wrapper.main > * {
+  margin-bottom: 20px;
+}
+
+.wrapper.main #database-url-input-section .database-url-desc {
+  font-family: "Source Sans Pro", "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 20px;
+}
+
+.wrapper.main #database-url-input-section #database-url-input-grid {
+  border: 1px solid black;
+  display: grid;
+  grid-template-areas: "input search";
+  grid-template-columns: auto 10%;
+  margin-top: 1em;
+}
+
+.wrapper.main #database-url-input-section #database-url-input-grid #dbUrlInput {
+  border: 0;
+  font-size: 17px;
+  grid-area: input;
+  padding: .25em;
+}
+
+.wrapper.main #database-url-input-section #database-url-input-grid #dbUrlSearch {
+  background: transparent;
+  border: 0;
+  border-left: 1px solid black;
+  cursor: pointer;
+  grid-area: search;
+}
+
+.wrapper.main #database-url-input-section #database-url-input-grid #dbUrlSearch:hover {
+  background: linear-gradient(to top, #5b210f, #b3411d 50%, #dc5227);
+}
+
+.wrapper.main #database-url-input-section #database-url-input-grid #dbUrlSearch:active {
+  background: linear-gradient(to right, #5b210f, #b3411d, #dc5227);
 }
 
 .wrapper.main ul#search-list {
@@ -96,14 +145,15 @@ footer > .wrapper {
   font-size: 16px;
   grid-gap: 0;
   grid-template-areas: "input button";
-  grid-template-columns: 1fr 10%;
+  grid-template-columns: auto 10%;
 }
 
 .wrapper.main ul#search-list li.search-engine div.search-engine-input-item input.search-engine-input {
   background: transparent;
   border: 0;
+  font-size: 17px;
   grid-area: input;
-  padding: .5em;
+  padding: .25em;
 }
 
 .wrapper.main ul#search-list li.search-engine div.search-engine-input-item input.search-engine-input:focus {

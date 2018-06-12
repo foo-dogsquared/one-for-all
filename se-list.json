@@ -10,6 +10,11 @@
     "url": "https://devdocs.io/search"
   },
   {
+    "id": "devto",
+    "name": "Dev.to",
+    "url": "https://dev.to/search"
+  },
+  {
     "id": "duckduckgo",
     "name": "DuckDuckGo",
     "url": "https://duckduckgo.com/"
