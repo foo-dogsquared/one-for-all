@@ -114,8 +114,9 @@ function main() {
                 SE_INPUT_ITEM.setAttribute("class", "search-engine-input-item");
 
                 const SE_INPUT = document.createElement("input");
-                SE_INPUT.setAttribute("id", obj.id);
                 SE_INPUT.setAttribute("class", "search-engine-input");
+                SE_INPUT.setAttribute("id", obj.id);
+                SE_INPUT.setAttribute("tabindex", 3);
                 SE_INPUT.addEventListener("keypress", (event) => {
                     if (event.key === "Enter") {
                         const TARGET_INPUT = document.querySelector(`input#${obj.id}`);

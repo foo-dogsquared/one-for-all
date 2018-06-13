@@ -107,6 +107,10 @@ footer > .wrapper {
   padding: .25em;
 }
 
+.wrapper.main #database-url-input-section #database-url-input-grid #dbUrlInput:focus {
+  background: #f8dfd7;
+}
+
 .wrapper.main #database-url-input-section #database-url-input-grid #dbUrlSearch {
   background: transparent;
   border: 0;
