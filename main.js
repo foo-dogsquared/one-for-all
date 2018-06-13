@@ -11,6 +11,7 @@ function main() {
 
     const DB_URL_INPUT = document.querySelector("#dbUrlInput");
     const DB_URL_SEARCH = document.querySelector("#dbUrlSearch");
+    const DB_URL_STATUS = document.querySelector("#database-url-status");
     let CURRENT_URL;
     applySVG(SVG, DB_URL_SEARCH);
 
@@ -18,7 +19,24 @@ function main() {
         fetch(URL)
             .then(response => {
                 CURRENT_URL = response.url;
-                console.log(response.url)
+                console.log(`${response.url} is ${response.status} (${response.statusText})`)
+
+                function prependStatusText(response) {
+                    return `Status ${response.status}: ${response.statusText} <br>`
+                }
+
+                switch (response.status) {
+                    case 200:
+                    DB_URL_STATUS.innerHTML = `${prependStatusText(response)} JSON file from <i>${CURRENT_URL}</i> has been loaded.`;
+                    break;
+                    case 403:
+                    DB_URL_STATUS.innerHTML = `${prependStatusText(response)} Forbidden access to the specified file.`
+                    break;
+                    case 404:
+                    DB_URL_STATUS.innerHTML = `${prependStatusText(response)} File not found.`
+                    break;
+                }
+                DB_URL_STATUS.style.visibility = "visible";
                 return response;
             })
             .then(response => response.json())
@@ -28,15 +46,28 @@ function main() {
                 createList(SE_DATA_LIST);
                 console.log(SE_DATA_LIST);
             })
-    }
-   
-    DB_URL_SEARCH.addEventListener("click", (event) => {
-        if (!DB_URL_INPUT.value) getListFromJSON("./se-list.json");
-        else {
+            .catch(error => {
+                return null;
+            })
+        }
+
+    function retrieveJSON() {
+        const urlRegex = /https?\:\/\/[\w|\W|\d]+[.][\w]+/gi;
+        const urlString = DB_URL_INPUT.value.match(urlRegex) ? new URL(DB_URL_INPUT.value) : new URL(document.URL + DB_URL_INPUT.value);
+        if (urlString.href === document.URL) getListFromJSON("./se-list.json");
+        else if (urlString.href.split("/").pop().indexOf("se-list.json") === 0) {
             getListFromJSON(DB_URL_INPUT.value)
             DB_URL_INPUT.value = '';
+        } else {
+            DB_URL_STATUS.innerHTML = `JSON should be named as <code>se-list</code>.`
+            DB_URL_STATUS.style.visibility = "visible";
         }
-    })
+    }
+   
+    DB_URL_SEARCH.addEventListener("click", retrieveJSON);
+    DB_URL_INPUT.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") retrieveJSON();
+    });
 
     function sortID(current, next) {
         if (current.id > next.id) return 1
@@ -45,7 +76,9 @@ function main() {
     }
 
     function createList(querylist) {
-        while (SE_LIST.firstElementChild) {SE_LIST.removeChild(SE_LIST.firstElementChild)}
+        function updateList(listNode) {
+            while (listNode.firstElementChild) {listNode.removeChild(listNode.firstElementChild)}
+        }
 
         function openSearchPage(eventListener) {
             const TARGET_INPUT = document.querySelector(`input#${obj.id}`);
@@ -59,71 +92,78 @@ function main() {
                 TARGET_INPUT.value = '';
             }
         }
+
+        updateList(SE_LIST);
         
-        querylist.forEach(obj => {
-            const SE_LIST_ITEM = document.createElement("li");
-            SE_LIST_ITEM.setAttribute("class", "search-engine");
+        querylist.forEach((obj, index) => {
+            if (obj.hasOwnProperty("id") && obj.hasOwnProperty("url")) {
+                const SE_LIST_ITEM = document.createElement("li");
+                SE_LIST_ITEM.setAttribute("class", "search-engine");
 
-            const SE_ITEM_GRID = document.createElement("div");
-            SE_ITEM_GRID.setAttribute("class", "search-engine-item-grid");
+                const SE_ITEM_GRID = document.createElement("div");
+                SE_ITEM_GRID.setAttribute("class", "search-engine-item-grid");
 
-            const SE_NAME = document.createElement("div");
-            SE_NAME.setAttribute("class", "search-engine-name");
-            
-            const SE_NAME_HEADER = document.createElement("label");
-            SE_NAME_HEADER.setAttribute("for", obj.id)
-            SE_NAME_HEADER.textContent = obj.name ? obj.name : obj.id;
+                const SE_NAME = document.createElement("div");
+                SE_NAME.setAttribute("class", "search-engine-name");
+                
+                const SE_NAME_HEADER = document.createElement("label");
+                SE_NAME_HEADER.setAttribute("for", obj.id)
+                SE_NAME_HEADER.textContent = obj.name ? obj.name : obj.id;
 
-            const SE_INPUT_ITEM = document.createElement("div");
-            SE_INPUT_ITEM.setAttribute("class", "search-engine-input-item");
+                const SE_INPUT_ITEM = document.createElement("div");
+                SE_INPUT_ITEM.setAttribute("class", "search-engine-input-item");
 
-            const SE_INPUT = document.createElement("input");
-            SE_INPUT.setAttribute("id", obj.id);
-            SE_INPUT.setAttribute("class", "search-engine-input");
-            SE_INPUT.addEventListener("keypress", (event) => {
-                if (event.key === "Enter") {
+                const SE_INPUT = document.createElement("input");
+                SE_INPUT.setAttribute("id", obj.id);
+                SE_INPUT.setAttribute("class", "search-engine-input");
+                SE_INPUT.addEventListener("keypress", (event) => {
+                    if (event.key === "Enter") {
+                        const TARGET_INPUT = document.querySelector(`input#${obj.id}`);
+
+                    if (!TARGET_INPUT.value) eventListener.preventDefault()
+                    else if (TARGET_INPUT.value.trim() !== TARGET_INPUT.value) eventListener.preventDefault()
+                    else {
+                        const FULLSEARCH_URL = `${obj.url}?${obj.param ? obj.param : "q"}=${TARGET_INPUT.value}`;
+
+                        window.open(FULLSEARCH_URL, "_blank");
+                        TARGET_INPUT.value = '';
+                        }
+                    }
+                })
+                SE_INPUT.addEventListener("focus", () => DB_URL_STATUS.textContent = '');
+
+                const SE_INPUT_BTN = document.createElement("button");
+                SE_INPUT_BTN.setAttribute("type", "button");
+                SE_INPUT_BTN.setAttribute("class", "search-engine-input-button");
+                applySVG(SVG, SE_INPUT_BTN)
+                SE_INPUT_BTN.addEventListener("click", (event) => {
                     const TARGET_INPUT = document.querySelector(`input#${obj.id}`);
 
-                if (!TARGET_INPUT.value) eventListener.preventDefault()
-                else if (TARGET_INPUT.value.trim() !== TARGET_INPUT.value) eventListener.preventDefault()
-                else {
-                    const FULLSEARCH_URL = `${obj.url}?${obj.param ? obj.param : "q"}=${TARGET_INPUT.value}`;
+                    if (!TARGET_INPUT.value) event.preventDefault()
+                    else if (TARGET_INPUT.value.trim() !== TARGET_INPUT.value) event.preventDefault()
+                    else {
+                        const FULLSEARCH_URL = `${obj.url}?${obj.param ? obj.param : "q"}=${TARGET_INPUT.value}`;
 
-                    window.open(FULLSEARCH_URL, "_blank");
-                    TARGET_INPUT.value = '';
+                        window.open(FULLSEARCH_URL, "_blank");
+                        TARGET_INPUT.value = '';
                     }
-                }
-            })
+                });
 
-            const SE_INPUT_BTN = document.createElement("button");
-            SE_INPUT_BTN.setAttribute("type", "button");
-            SE_INPUT_BTN.setAttribute("class", "search-engine-input-button");
-            applySVG(SVG, SE_INPUT_BTN)
-            SE_INPUT_BTN.addEventListener("click", (event) => {
-                const TARGET_INPUT = document.querySelector(`input#${obj.id}`);
+                // placed here for easier view of hierarchy of things
+                SE_INPUT_ITEM.appendChild(SE_INPUT);
+                SE_INPUT_ITEM.appendChild(SE_INPUT_BTN);
 
-                if (!TARGET_INPUT.value) event.preventDefault()
-                else if (TARGET_INPUT.value.trim() !== TARGET_INPUT.value) event.preventDefault()
-                else {
-                    const FULLSEARCH_URL = `${obj.url}?${obj.param ? obj.param : "q"}=${TARGET_INPUT.value}`;
+                SE_NAME.appendChild(SE_NAME_HEADER);
 
-                    window.open(FULLSEARCH_URL, "_blank");
-                    TARGET_INPUT.value = '';
-                }
-            });
+                SE_ITEM_GRID.appendChild(SE_NAME);
+                SE_ITEM_GRID.appendChild(SE_INPUT_ITEM);
 
-            // placed here for easier view of hierarchy of things
-            SE_INPUT_ITEM.appendChild(SE_INPUT);
-            SE_INPUT_ITEM.appendChild(SE_INPUT_BTN);
+                SE_LIST_ITEM.appendChild(SE_ITEM_GRID);
 
-            SE_NAME.appendChild(SE_NAME_HEADER);
-
-            SE_ITEM_GRID.appendChild(SE_NAME);
-            SE_ITEM_GRID.appendChild(SE_INPUT_ITEM);
-
-            SE_LIST_ITEM.appendChild(SE_ITEM_GRID);
-
-            SE_LIST.appendChild(SE_LIST_ITEM);
+                SE_LIST.appendChild(SE_LIST_ITEM);
+            } else if (obj.hasOwnProperty("id") && !obj.hasOwnProperty("url")) {console.log(`Object #${index + 1} with ID ${obj.id} does not have a URL field.`)}
+            else if (!obj.hasOwnProperty("id") && obj.hasOwnProperty("url")) {console.log(`Object #${index + 1} with URL ${obj.url} does not have an ID field.`)}
+            else {console.log(`Object #${index + 1} has none of the required data.`)}
         });
 
         LIST_CONTAINER.appendChild(SE_LIST);

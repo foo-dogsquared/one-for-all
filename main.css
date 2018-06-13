@@ -123,6 +123,13 @@ footer > .wrapper {
   background: linear-gradient(to right, #5b210f, #b3411d, #dc5227);
 }
 
+.wrapper.main #database-url-input-section #database-url-status {
+  font-family: "Source Sans Pro", "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  margin: 1em auto 0 auto;
+  text-align: center;
+  visibility: hidden;
+}
+
 .wrapper.main ul#search-list {
   list-style: none;
   margin: 0 auto;
