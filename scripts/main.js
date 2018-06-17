@@ -1,4 +1,6 @@
 "use strict";
+// const DOM = require("./lib/DOM");
+
 function main() {
     const LIST_CONTAINER = document.querySelector("#list-container");
     const SE_LIST = document.querySelector("ul#search-list");
@@ -80,23 +82,23 @@ function main() {
             while (listNode.firstElementChild) {listNode.removeChild(listNode.firstElementChild)}
         }
 
-        function openSearchPage(eventListener) {
-            const TARGET_INPUT = document.querySelector(`input#${obj.id}`);
-
-            if (!TARGET_INPUT.value) eventListener.preventDefault()
-            else if (TARGET_INPUT.value.trim() !== TARGET_INPUT.value) eventListener.preventDefault()
-            else {
-                const FULLSEARCH_URL = `${obj.url}?${obj.param ? obj.param : "q"}=${TARGET_INPUT.value}`;
-
-                window.open(FULLSEARCH_URL, "_blank");
-                TARGET_INPUT.value = '';
-            }
-        }
-
         updateList(SE_LIST);
         
-        querylist.forEach((obj, index) => {
-            if (obj.hasOwnProperty("id") && obj.hasOwnProperty("url")) {
+        for (const listItem of querylist) {
+            function openSearchPage(event) {
+                const TARGET_INPUT = document.querySelector(`input#${listItem.id}`);
+    
+                if (!TARGET_INPUT.value) event.preventDefault()
+                else if (TARGET_INPUT.value.trim() !== TARGET_INPUT.value) event.preventDefault()
+                else {
+                    const FULLSEARCH_URL = `${listItem.url}${listItem.hash ? listItem.hash : "?"}${listItem.param ? listItem.param : "q"}=${TARGET_INPUT.value}`;
+    
+                    window.open(FULLSEARCH_URL, "_blank");
+                    TARGET_INPUT.value = '';
+                }
+            }
+
+            if (listItem.hasOwnProperty("id") && listItem.hasOwnProperty("url")) {
                 const SE_LIST_ITEM = document.createElement("li");
                 SE_LIST_ITEM.setAttribute("class", "search-engine");
 
@@ -107,29 +109,18 @@ function main() {
                 SE_NAME.setAttribute("class", "search-engine-name");
                 
                 const SE_NAME_HEADER = document.createElement("label");
-                SE_NAME_HEADER.setAttribute("for", obj.id)
-                SE_NAME_HEADER.textContent = obj.name ? obj.name : obj.id;
+                SE_NAME_HEADER.setAttribute("for", listItem.id)
+                SE_NAME_HEADER.textContent = listItem.name ? listItem.name : listItem.id;
 
                 const SE_INPUT_ITEM = document.createElement("div");
                 SE_INPUT_ITEM.setAttribute("class", "search-engine-input-item");
 
                 const SE_INPUT = document.createElement("input");
                 SE_INPUT.setAttribute("class", "search-engine-input");
-                SE_INPUT.setAttribute("id", obj.id);
+                SE_INPUT.setAttribute("id", listItem.id);
                 SE_INPUT.setAttribute("tabindex", 3);
                 SE_INPUT.addEventListener("keypress", (event) => {
-                    if (event.key === "Enter") {
-                        const TARGET_INPUT = document.querySelector(`input#${obj.id}`);
-
-                    if (!TARGET_INPUT.value) eventListener.preventDefault()
-                    else if (TARGET_INPUT.value.trim() !== TARGET_INPUT.value) eventListener.preventDefault()
-                    else {
-                        const FULLSEARCH_URL = `${obj.url}?${obj.param ? obj.param : "q"}=${TARGET_INPUT.value}`;
-
-                        window.open(FULLSEARCH_URL, "_blank");
-                        TARGET_INPUT.value = '';
-                        }
-                    }
+                    if (event.key === "Enter") openSearchPage(event)
                 })
                 SE_INPUT.addEventListener("focus", () => DB_URL_STATUS.textContent = '');
 
@@ -137,18 +128,7 @@ function main() {
                 SE_INPUT_BTN.setAttribute("type", "button");
                 SE_INPUT_BTN.setAttribute("class", "search-engine-input-button");
                 applySVG(SVG, SE_INPUT_BTN)
-                SE_INPUT_BTN.addEventListener("click", (event) => {
-                    const TARGET_INPUT = document.querySelector(`input#${obj.id}`);
-
-                    if (!TARGET_INPUT.value) event.preventDefault()
-                    else if (TARGET_INPUT.value.trim() !== TARGET_INPUT.value) event.preventDefault()
-                    else {
-                        const FULLSEARCH_URL = `${obj.url}?${obj.param ? obj.param : "q"}=${TARGET_INPUT.value}`;
-
-                        window.open(FULLSEARCH_URL, "_blank");
-                        TARGET_INPUT.value = '';
-                    }
-                });
+                SE_INPUT_BTN.addEventListener("click", openSearchPage);
 
                 // placed here for easier view of hierarchy of things
                 SE_INPUT_ITEM.appendChild(SE_INPUT);
@@ -162,10 +142,11 @@ function main() {
                 SE_LIST_ITEM.appendChild(SE_ITEM_GRID);
 
                 SE_LIST.appendChild(SE_LIST_ITEM);
-            } else if (obj.hasOwnProperty("id") && !obj.hasOwnProperty("url")) {console.log(`Object #${index + 1} with ID ${obj.id} does not have a URL field.`)}
-            else if (!obj.hasOwnProperty("id") && obj.hasOwnProperty("url")) {console.log(`Object #${index + 1} with URL ${obj.url} does not have an ID field.`)}
-            else {console.log(`Object #${index + 1} has none of the required data.`)}
-        });
+            } else if (listItem.hasOwnProperty("id") && !listItem.hasOwnProperty("url")) {console.log(`Object #${listItem + 1} with ID ${listItem.id} does not have a URL field.`)}
+            else if (!listItem.hasOwnProperty("id") && listItem.hasOwnProperty("url")) {console.log(`Object #${listItem + 1} with URL ${listItem.url} does not have an ID field.`)}
+            else {console.log(`Object #${listItem + 1} has none of the required data.`)}
+            console.log(listItem)
+    }
 
         LIST_CONTAINER.appendChild(SE_LIST);
     }

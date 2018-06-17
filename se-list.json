@@ -1,5 +1,17 @@
 [
   {
+    "id": "bitbucket",
+    "name": "BitBucket",
+    "url": "https://bitbucket.org/search"
+  },
+  {
+    "id": "caniuse",
+    "name": "Can I Use",
+    "url": "https://caniuse.com/",
+    "param": "search",
+    "hash": "#"
+  },
+  {
     "id": "cdnjs",
     "name": "cdnjs",
     "url": "https://cdnjs.com/"
@@ -42,6 +54,11 @@
     "param": "keywords"
   },
   {
+    "id": "medium",
+    "name": "Medium",
+    "url": "https://medium.freecodecamp.org/search"
+  },
+  {
     "id": "mdn",
     "name": "MDN Web Docs",
     "url": "https://developer.mozilla.org/en-US/search"
@@ -50,6 +67,12 @@
     "id": "npm",
     "name": "npm Package Search",
     "url": "https://npmjs.com/search"
+  },
+  {
+    "id": "pexels",
+    "name": "Pexels",
+    "url": "https://www.pexels.com/search/",
+    "hash": ""
   },
   {
     "id": "stackoverflow",
