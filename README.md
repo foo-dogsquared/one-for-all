@@ -3,13 +3,18 @@ A single web page for most of the popular search engines.
 
 Well, not the one of the most elegant solution but it works and there are still some things I want to implement someday. So expect this to be improved... someday (still not close to elegance, though). 😂
 ## List of available search engines so far:
+- BitBucket
+- Can I Use
 - cdnjs
 - DevDocs
+- Dev.to
 - DuckDuckGo
 - GitHub
 - GitLab
 - Google
+- LinkedIn
 - MDN Web Docs
+- Medium
 - npm Package Search
 - Stack Overflow
 - YouTube
@@ -30,9 +35,17 @@ You can fork this one and adjust the array of objects to whatever you desire. Ju
     - https://duckduckgo.com/ (Yes the slash at the end is necessary)
     - https://youtube.com/results
     - https://gitlab.com/search
+    - https://caniuse.com/
 - `name` - **[optional]**; this is the one that will appear as the name of the search engine in the page; furthermore, when there is no `name` key, it will use the `id` instead as the name
-- `param` - **[optional depending on the case]**; this refers to the parameter that is used as part of the search query string; if there's no value of the said property, then "q" will be the default
+- `param` - **[optional depending on the case]**; this refers to the parameter that is used as part of the search query string; if there's no value of the said property, then `q` will be the default
     - https://google.com/search?q=SEARCH_TERM
     - https://duckduckgo.com/?q=SEARCH_TREM
     - https://youtube.com/results?q=foo-dogsquared
     - https://gitlab.com/search?search=SEARCH_MRET (it has `"search"` as the value)
+    - https://caniuse.com/#search=SEARCH_TMER (also has `"search"` as the value)
+- `hash` - **[optional depending on the case]**; the hash identifier in the query string; if there's no value for the said property, then `?` will be the default value
+    - https://google.com/search?q=SEARCH_TERM
+    - https://duckduckgo.com/?q=SEARCH_TREM
+    - https://youtube.com/results?q=foo-dogsquared
+    - https://gitlab.com/search?search=SEARCH_MRET 
+    - https://caniuse.com/#search=SEARCH_TMER (has `"#"` as the value)
