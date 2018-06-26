@@ -56,7 +56,7 @@
   {
     "id": "medium",
     "name": "Medium",
-    "url": "https://medium.freecodecamp.org/search"
+    "url": "https://medium.com/search"
   },
   {
     "id": "mdn",
@@ -67,12 +67,6 @@
     "id": "npm",
     "name": "npm Package Search",
     "url": "https://npmjs.com/search"
-  },
-  {
-    "id": "pexels",
-    "name": "Pexels",
-    "url": "https://www.pexels.com/search/",
-    "hash": ""
   },
   {
     "id": "stackoverflow",
