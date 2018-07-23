@@ -54,6 +54,11 @@ function main() {
         }
 
     function retrieveJSON() {
+        if (DB_URL_INPUT.value.match(/books?/gi)) {
+            getListFromJSON(`https://cdn.rawgit.com/foo-dogsquared/274fbe4508cdbf48a5a8bdbe28a731d0/raw/43609503ec9b30cb3afacdd3ac3ff599ccb80573/books.json`)
+            return;
+        }
+
         const urlRegex = /https?\:\/\/[\w|\W|\d]+[.][\w]+/gi;
         const urlString = DB_URL_INPUT.value.match(urlRegex) ? new URL(DB_URL_INPUT.value) : new URL(document.URL + DB_URL_INPUT.value);
         if (urlString.href === document.URL) getListFromJSON("./se-list.json");
@@ -88,13 +93,14 @@ function main() {
             function openSearchPage(event) {
                 const TARGET_INPUT = document.querySelector(`input#${listItem.id}`);
     
-                if (!TARGET_INPUT.value) event.preventDefault()
-                else if (TARGET_INPUT.value.trim() !== TARGET_INPUT.value) event.preventDefault()
-                else {
+                if (TARGET_INPUT.value.match(/\S/gi)) {
                     const FULLSEARCH_URL = `${listItem.url}${listItem.hash ? listItem.hash : "?"}${listItem.param ? listItem.param : "q"}=${TARGET_INPUT.value}`;
     
                     window.open(FULLSEARCH_URL, "_blank");
                     TARGET_INPUT.value = '';
+                }
+                else {
+                    event.preventDefault();
                 }
             }
 
