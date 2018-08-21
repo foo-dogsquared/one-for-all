@@ -2,7 +2,7 @@
 A single web page for most of the popular search engines.
 
 Well, not the one of the most elegant solution but it works and there are still some things I want to implement someday. So expect this to be improved... someday (still not close to elegance, though). 😂
-## List of available search engines so far:
+## List of included search engines so far:
 - BitBucket
 - Can I Use
 - cdnjs
@@ -15,6 +15,7 @@ Well, not the one of the most elegant solution but it works and there are still 
 - LinkedIn
 - MDN Web Docs
 - Medium
+- Noun Project
 - npm Package Search
 - Stack Overflow
 - YouTube

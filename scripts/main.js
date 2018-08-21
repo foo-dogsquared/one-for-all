@@ -55,8 +55,11 @@ function main() {
 
     function retrieveJSON() {
         if (DB_URL_INPUT.value.match(/books?/gi)) {
-            getListFromJSON(`https://cdn.rawgit.com/foo-dogsquared/274fbe4508cdbf48a5a8bdbe28a731d0/raw/43609503ec9b30cb3afacdd3ac3ff599ccb80573/books.json`)
+            getListFromJSON(`https://cdn.rawgit.com/foo-dogsquared/274fbe4508cdbf48a5a8bdbe28a731d0/raw/33286bba88cf7aab7109bc0d16b7f32e62368e1c/books.json`);
+            DB_URL_INPUT.value = '';
             return;
+        } else if (DB_URL_INPUT.value.match(/moocs?/gi)) {
+            getListFromJSON(`https://cdn.rawgit.com/foo-dogsquared/eb567b501ae328ec76e84c8f75cc9fdb/raw/64b395133f91a6c3e110b0cf017c0fa14d11d309/moocs.json`);
         }
 
         const urlRegex = /https?\:\/\/[\w|\W|\d]+[.][\w]+/gi;

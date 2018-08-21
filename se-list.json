@@ -64,6 +64,11 @@
     "url": "https://developer.mozilla.org/en-US/search"
   },
   {
+    "id": "noun_project",
+    "name": "Noun Project",
+    "url": "https://thenounproject.com/search/"
+  },
+  {
     "id": "npm",
     "name": "npm Package Search",
     "url": "https://npmjs.com/search"
