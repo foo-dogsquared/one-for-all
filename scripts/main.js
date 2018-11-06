@@ -1,7 +1,7 @@
 "use strict";
 // const DOM = require("./lib/DOM");
 
-function main() {
+function init() {
     const LIST_CONTAINER = document.querySelector("#list-container");
     const SE_LIST = document.querySelector("ul#search-list");
     const SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height="16"><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>`;
@@ -54,11 +54,11 @@ function main() {
         }
 
     function retrieveJSON() {
-        if (DB_URL_INPUT.value.match(/books?/gi)) {
+        if (DB_URL_INPUT.value.match(/^books?$/gi)) {
             getListFromJSON(`https://cdn.rawgit.com/foo-dogsquared/274fbe4508cdbf48a5a8bdbe28a731d0/raw/33286bba88cf7aab7109bc0d16b7f32e62368e1c/books.json`);
             DB_URL_INPUT.value = '';
             return;
-        } else if (DB_URL_INPUT.value.match(/moocs?/gi)) {
+        } else if (DB_URL_INPUT.value.match(/^moocs?$/gi)) {
             getListFromJSON(`https://cdn.rawgit.com/foo-dogsquared/eb567b501ae328ec76e84c8f75cc9fdb/raw/64b395133f91a6c3e110b0cf017c0fa14d11d309/moocs.json`);
         }
 
@@ -97,8 +97,8 @@ function main() {
                 const TARGET_INPUT = document.querySelector(`input#${listItem.id}`);
     
                 if (TARGET_INPUT.value.match(/\S/gi)) {
-                    const FULLSEARCH_URL = `${listItem.url}${listItem.hash ? listItem.hash : "?"}${listItem.param ? listItem.param : "q"}=${TARGET_INPUT.value}`;
-    
+                    const FULLSEARCH_URL = `${listItem.url}${listItem.hash ? listItem.hash : "?"}${listItem.param ? listItem.param : "q"}=${encodeURI(TARGET_INPUT.value)}`;
+                    console.log(encodeURI(TARGET_INPUT.value))
                     window.open(FULLSEARCH_URL, "_blank");
                     TARGET_INPUT.value = '';
                 }
@@ -161,4 +161,4 @@ function main() {
     }
 }
 
-main();
+init();
