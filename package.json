@@ -1,0 +1,25 @@
+{
+  "name": "one-for-all",
+  "version": "1.0.0",
+  "description": "A single web page for most of the popular search engines.",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm sass_update && browser-sync start --server --files \"index.html\" \"main.css\"",
+    "sass_update": "sass ./style/main.scss ./main.css --no-source-map"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/foo-dogsquared/one-for-all.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/foo-dogsquared/one-for-all/issues"
+  },
+  "homepage": "https://github.com/foo-dogsquared/one-for-all#readme",
+  "devDependencies": {
+    "browser-sync": "2.26.3",
+    "sass": "1.14.3"
+  }
+}
