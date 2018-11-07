@@ -1,0 +1,117 @@
+.plain-grid-layout {
+    display: grid;
+    grid-template-areas: "header" "main" "footer";
+    grid-template-rows: auto 1fr auto;
+    font-size: 16px;
+    height: 100%;
+}
+
+.wrapper {
+    margin: 0 auto;
+    max-width: $max-width;
+
+    header>&, footer>& {height: 100%;}
+}
+
+.header {
+    align-items: center;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
+
+.app-description {
+    font-family: "Source Sans Pro", $body-font-family;
+}
+
+.main {
+    padding: $space;
+
+    & > * {margin-bottom: $space}
+}
+
+#database-url-input-grid {
+    border: $plain-border;
+    display: flex;
+    flex-flow: row nowrap;
+    margin-top: 1em;
+}
+
+#dbUrlInput {
+    border: 0;
+    font-size: 17px;
+    padding: .25em;
+    width: $search-input-width;
+
+    &:focus {background: $input-focus-color;}
+}
+
+#dbUrlSearch {
+    background: transparent;
+    border: 0;
+    border-left: $plain-border;
+    cursor: pointer; 
+    width: $search-btn-width;
+
+    &:hover {background: linear-gradient(to top, $darker-main, $main-color 50%, $lighter-main)}
+    &:active {background: linear-gradient(to right, $darker-main, $main-color, $lighter-main)}
+}
+
+#database-url-status {
+    font-family: "Source Sans Pro", $body-font-family;
+    margin: 1em auto 0 auto;
+    text-align: center;
+    visibility: hidden;
+}
+
+#database-url-input-section {
+    .database-url-desc {
+        font-family: "Source Sans Pro", $body-font-family;
+        font-size: 20px;
+    }
+}
+
+#search-list {
+    list-style: none;
+    margin: 0 auto;
+    padding: 0;
+}
+
+
+li.search-engine {margin-bottom: $space;}
+
+.search-engine-name {
+    display: block;
+    font-family: $body-font-family;
+    margin: 0;
+    padding: 0;
+}
+
+div.search-engine-input-item {
+    border: $plain-border;
+    display: flex;
+    flex-flow: row nowrap;
+    font-size: 16px;
+}
+
+.search-engine-input {
+    background: transparent;
+    border: 0;
+    font-size: 17px;
+    padding: .25em;
+    width: $search-input-width;
+    
+    &:focus {background: $input-focus-color;}
+}
+
+.search-engine-input-button {
+    background: transparent;
+    border: 0;
+    border-left: $plain-border;
+    width: $search-btn-width;
+
+    &:hover {
+        cursor: pointer;
+        background: $btn-hover-color;
+    }
+}

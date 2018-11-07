@@ -10,14 +10,6 @@ body {
   padding: 0;
 }
 
-body.plain-grid-layout {
-  display: grid;
-  grid-template-areas: "header" "main" "footer";
-  grid-template-rows: auto 1fr auto;
-  font-size: 16px;
-  height: 100%;
-}
-
 header,
 footer {
   background: linear-gradient(45deg, #5b210f, #b3411d, #dc5227);
@@ -25,7 +17,6 @@ footer {
   height: auto;
   padding: 20px;
 }
-
 header *,
 footer * {
   margin: 0;
@@ -53,133 +44,129 @@ a {
   color: white;
   text-decoration: none;
 }
-
 a:hover {
   text-decoration: underline;
+}
+
+.plain-grid-layout {
+  display: grid;
+  grid-template-areas: "header" "main" "footer";
+  grid-template-rows: auto 1fr auto;
+  font-size: 16px;
+  height: 100%;
 }
 
 .wrapper {
   margin: 0 auto;
   max-width: 800px;
 }
-
-header > .wrapper,
-footer > .wrapper {
+header > .wrapper, footer > .wrapper {
   height: 100%;
 }
 
-.wrapper.header {
+.header {
   align-items: center;
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
 }
 
-.wrapper.header p.app-description {
+.app-description {
   font-family: "Source Sans Pro", "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
-.wrapper.main {
+.main {
   padding: 20px;
 }
-
-.wrapper.main > * {
+.main > * {
   margin-bottom: 20px;
 }
 
-.wrapper.main #database-url-input-section .database-url-desc {
-  font-family: "Source Sans Pro", "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-size: 20px;
-}
-
-.wrapper.main #database-url-input-section #database-url-input-grid {
+#database-url-input-grid {
   border: 1px solid black;
-  display: grid;
-  grid-template-areas: "input search";
-  grid-template-columns: auto 10%;
+  display: flex;
+  flex-flow: row nowrap;
   margin-top: 1em;
 }
 
-.wrapper.main #database-url-input-section #database-url-input-grid #dbUrlInput {
+#dbUrlInput {
   border: 0;
   font-size: 17px;
-  grid-area: input;
-  padding: .25em;
+  padding: 0.25em;
+  width: 90%;
 }
-
-.wrapper.main #database-url-input-section #database-url-input-grid #dbUrlInput:focus {
+#dbUrlInput:focus {
   background: #f8dfd7;
 }
 
-.wrapper.main #database-url-input-section #database-url-input-grid #dbUrlSearch {
+#dbUrlSearch {
   background: transparent;
   border: 0;
   border-left: 1px solid black;
   cursor: pointer;
-  grid-area: search;
+  width: 10%;
 }
-
-.wrapper.main #database-url-input-section #database-url-input-grid #dbUrlSearch:hover {
+#dbUrlSearch:hover {
   background: linear-gradient(to top, #5b210f, #b3411d 50%, #dc5227);
 }
-
-.wrapper.main #database-url-input-section #database-url-input-grid #dbUrlSearch:active {
+#dbUrlSearch:active {
   background: linear-gradient(to right, #5b210f, #b3411d, #dc5227);
 }
 
-.wrapper.main #database-url-input-section #database-url-status {
+#database-url-status {
   font-family: "Source Sans Pro", "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   margin: 1em auto 0 auto;
   text-align: center;
   visibility: hidden;
 }
 
-.wrapper.main ul#search-list {
+#database-url-input-section .database-url-desc {
+  font-family: "Source Sans Pro", "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 20px;
+}
+
+#search-list {
   list-style: none;
   margin: 0 auto;
   padding: 0;
 }
 
-.wrapper.main ul#search-list li.search-engine {
+li.search-engine {
   margin-bottom: 20px;
 }
 
-.wrapper.main ul#search-list li.search-engine div.search-engine-name > label {
+.search-engine-name {
+  display: block;
   font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   margin: 0;
   padding: 0;
 }
 
-.wrapper.main ul#search-list li.search-engine div.search-engine-input-item {
+div.search-engine-input-item {
   border: 1px solid black;
-  display: grid;
+  display: flex;
+  flex-flow: row nowrap;
   font-size: 16px;
-  grid-gap: 0;
-  grid-template-areas: "input button";
-  grid-template-columns: auto 10%;
 }
 
-.wrapper.main ul#search-list li.search-engine div.search-engine-input-item input.search-engine-input {
+.search-engine-input {
   background: transparent;
   border: 0;
   font-size: 17px;
-  grid-area: input;
-  padding: .25em;
+  padding: 0.25em;
+  width: 90%;
 }
-
-.wrapper.main ul#search-list li.search-engine div.search-engine-input-item input.search-engine-input:focus {
+.search-engine-input:focus {
   background: #f8dfd7;
 }
 
-.wrapper.main ul#search-list li.search-engine div.search-engine-input-item button.search-engine-input-button {
+.search-engine-input-button {
   background: transparent;
   border: 0;
   border-left: 1px solid black;
-  grid-area: button;
+  width: 10%;
 }
-
-.wrapper.main ul#search-list li.search-engine div.search-engine-input-item button.search-engine-input-button:hover {
+.search-engine-input-button:hover {
   cursor: pointer;
   background: #f1bcab;
 }
-/*# sourceMappingURL=main.css.map */

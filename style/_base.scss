@@ -1,0 +1,47 @@
+
+html,
+body {
+    font-family: "PT Sans Narrow", "Open Sans Condensed", "Open Sans", $default-font-family;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+header,
+footer {
+    background: $main-gradient;
+    color: white;
+    height: auto;
+    padding: $space;
+
+    & * {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+header {
+    grid-area: header;
+}
+
+main {
+    grid-area: main;
+}
+
+footer {
+    grid-area: footer;
+}
+
+hr {
+    border-top: $dashed-border;
+    margin: 2em auto;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    
+    &:hover {
+        text-decoration: underline;
+    }
+}
