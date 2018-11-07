@@ -48,9 +48,7 @@ function init() {
                 createList(SE_DATA_LIST);
                 console.log(SE_DATA_LIST);
             })
-            .catch(error => {
-                return null;
-            })
+            .catch(error => {return null;})
         }
 
     function retrieveJSON() {
@@ -62,7 +60,7 @@ function init() {
             getListFromJSON(`https://cdn.rawgit.com/foo-dogsquared/eb567b501ae328ec76e84c8f75cc9fdb/raw/64b395133f91a6c3e110b0cf017c0fa14d11d309/moocs.json`);
         }
 
-        const urlRegex = /https?\:\/\/[\w|\W|\d]+[.][\w]+/gi;
+        const urlRegex = /(https?|file|ftp)\:\/\/[\w|\W|\d]+[.][\w]+/gi;
         const urlString = DB_URL_INPUT.value.match(urlRegex) ? new URL(DB_URL_INPUT.value) : new URL(document.URL + DB_URL_INPUT.value);
         if (urlString.href === document.URL) getListFromJSON("./se-list.json");
         else if (urlString.href.split("/").pop().indexOf("se-list.json") === 0) {
@@ -97,7 +95,7 @@ function init() {
                 const TARGET_INPUT = document.querySelector(`input#${listItem.id}`);
     
                 if (TARGET_INPUT.value.match(/\S/gi)) {
-                    const FULLSEARCH_URL = `${listItem.url}${listItem.hash ? listItem.hash : "?"}${listItem.param ? listItem.param : "q"}=${encodeURI(TARGET_INPUT.value)}`;
+                    const FULLSEARCH_URL = `${listItem.url}${listItem.hash ? listItem.hash : "?"}${listItem.param ? listItem.param : "q"}=${encodeURIComponent(TARGET_INPUT.value)}`;
                     console.log(encodeURI(TARGET_INPUT.value))
                     window.open(FULLSEARCH_URL, "_blank");
                     TARGET_INPUT.value = '';
@@ -110,15 +108,10 @@ function init() {
             if (listItem.hasOwnProperty("id") && listItem.hasOwnProperty("url")) {
                 const SE_LIST_ITEM = document.createElement("li");
                 SE_LIST_ITEM.setAttribute("class", "search-engine");
-
-                const SE_ITEM_GRID = document.createElement("div");
-                SE_ITEM_GRID.setAttribute("class", "search-engine-item-grid");
-
-                const SE_NAME = document.createElement("div");
-                SE_NAME.setAttribute("class", "search-engine-name");
                 
                 const SE_NAME_HEADER = document.createElement("label");
-                SE_NAME_HEADER.setAttribute("for", listItem.id)
+                SE_NAME_HEADER.setAttribute("for", listItem.id);
+                SE_NAME_HEADER.setAttribute("class", "search-engine-name");
                 SE_NAME_HEADER.textContent = listItem.name ? listItem.name : listItem.id;
 
                 const SE_INPUT_ITEM = document.createElement("div");
@@ -143,12 +136,8 @@ function init() {
                 SE_INPUT_ITEM.appendChild(SE_INPUT);
                 SE_INPUT_ITEM.appendChild(SE_INPUT_BTN);
 
-                SE_NAME.appendChild(SE_NAME_HEADER);
-
-                SE_ITEM_GRID.appendChild(SE_NAME);
-                SE_ITEM_GRID.appendChild(SE_INPUT_ITEM);
-
-                SE_LIST_ITEM.appendChild(SE_ITEM_GRID);
+                SE_LIST_ITEM.appendChild(SE_NAME_HEADER);
+                SE_LIST_ITEM.appendChild(SE_INPUT_ITEM);
 
                 SE_LIST.appendChild(SE_LIST_ITEM);
             } else if (listItem.hasOwnProperty("id") && !listItem.hasOwnProperty("url")) {console.log(`Object #${listItem + 1} with ID ${listItem.id} does not have a URL field.`)}
