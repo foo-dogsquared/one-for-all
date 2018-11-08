@@ -1,5 +1,6 @@
 "use strict";
-// const DOM = require("./lib/DOM");
+const books_json_url = 'https://cdn.staticaly.com/gist/foo-dogsquared/274fbe4508cdbf48a5a8bdbe28a731d0/raw/33286bba88cf7aab7109bc0d16b7f32e62368e1c/books.json';
+const moocs_json_url = 'https://cdn.staticaly.com/gist/foo-dogsquared/eb567b501ae328ec76e84c8f75cc9fdb/raw/6f706fe1d20b42b72fdacb5781383ce4a2b6ae76/moocs.json';
 
 function init() {
     const LIST_CONTAINER = document.querySelector("#list-container");
@@ -53,22 +54,23 @@ function init() {
 
     function retrieveJSON() {
         if (DB_URL_INPUT.value.match(/^books?$/gi)) {
-            getListFromJSON(`https://cdn.rawgit.com/foo-dogsquared/274fbe4508cdbf48a5a8bdbe28a731d0/raw/33286bba88cf7aab7109bc0d16b7f32e62368e1c/books.json`);
+            getListFromJSON(books_json_url);
             DB_URL_INPUT.value = '';
             return;
         } else if (DB_URL_INPUT.value.match(/^moocs?$/gi)) {
-            getListFromJSON(`https://cdn.rawgit.com/foo-dogsquared/eb567b501ae328ec76e84c8f75cc9fdb/raw/64b395133f91a6c3e110b0cf017c0fa14d11d309/moocs.json`);
+            getListFromJSON(moocs_json_url);
         }
-
-        const urlRegex = /(https?|file|ftp)\:\/\/[\w|\W|\d]+[.][\w]+/gi;
-        const urlString = DB_URL_INPUT.value.match(urlRegex) ? new URL(DB_URL_INPUT.value) : new URL(document.URL + DB_URL_INPUT.value);
-        if (urlString.href === document.URL) getListFromJSON("./se-list.json");
-        else if (urlString.href.split("/").pop().indexOf("se-list.json") === 0) {
-            getListFromJSON(DB_URL_INPUT.value)
-            DB_URL_INPUT.value = '';
-        } else {
-            DB_URL_STATUS.innerHTML = `JSON should be named as <code>se-list</code>.`
-            DB_URL_STATUS.style.visibility = "visible";
+        else {
+            const urlRegex = /(https?|file|ftp)\:\/\/[\w|\W|\d]+[.][\w]+/gi;
+            const urlString = DB_URL_INPUT.value.match(urlRegex) ? new URL(DB_URL_INPUT.value) : new URL(document.URL + DB_URL_INPUT.value);
+            if (urlString.href === document.URL) getListFromJSON("./se-list.json");
+            else if (urlString.href.split("/").pop().indexOf("se-list.json") === 0) {
+                getListFromJSON(DB_URL_INPUT.value)
+                DB_URL_INPUT.value = '';
+            } else {
+                DB_URL_STATUS.innerHTML = `JSON should be named as <code>se-list</code>.`
+                DB_URL_STATUS.style.visibility = "visible";
+            }
         }
     }
    
@@ -95,8 +97,8 @@ function init() {
                 const TARGET_INPUT = document.querySelector(`input#${listItem.id}`);
     
                 if (TARGET_INPUT.value.match(/\S/gi)) {
-                    const FULLSEARCH_URL = `${listItem.url}${listItem.hash ? listItem.hash : "?"}${listItem.param ? listItem.param : "q"}=${encodeURIComponent(TARGET_INPUT.value)}`;
-                    console.log(encodeURI(TARGET_INPUT.value))
+                    const FULLSEARCH_URL = encodeURI(`${listItem.url}${listItem.hash ? listItem.hash : "?"}${listItem.param ? listItem.param : "q"}=${TARGET_INPUT.value}`);
+                    console.log(FULLSEARCH_URL);
                     window.open(FULLSEARCH_URL, "_blank");
                     TARGET_INPUT.value = '';
                 }

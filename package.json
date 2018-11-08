@@ -4,7 +4,7 @@
   "description": "A single web page for most of the popular search engines.",
   "main": "index.js",
   "scripts": {
-    "start": "npm sass_update && browser-sync start --server --files \"index.html\" \"main.css\"",
+    "start": "npm run sass_update && browser-sync start --server --files \"index.html\" \"main.css\"",
     "sass_update": "sass ./style/main.scss ./main.css --no-source-map"
   },
   "repository": {
