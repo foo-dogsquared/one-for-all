@@ -45,5 +45,16 @@ function setDefault(command, wholestring = DB_URL_INPUT.value) {
 }
 
 function toggleShowList(command, wholestring = DB_URL_INPUT.value) {
-    
+    const splitArguments = wholestring.split(/\s+/);
+    const commandIndex = splitArguments.indexOf(command);
+    const potentialArgument = splitArguments[commandIndex + 1];
+    let textMessage = "";
+    if (potentialArgument === "true" || potentialArgument === "false") {
+        localStorage.setItem(ONE_FOR_ALL_TOGGLE_DB_AT_START, potentialArgument);
+        textMessage += `<code style="font-size:1.1em;">${command}</code>: Toggling retrieving databases at start is set at ${potentialArgument}.<br>`;
+    }
+    else if (potentialArgument.match(/--\$\w+/) || !potentialArgument) textMessage += `<code style="font-size:1.1em;">${command}</code>: No value detected.<br>`;
+    else textMessage += `<code style="font-size:1.1em;">${command}</code>: Toggling database at start only have <code>true</code> and <code>false</code> as possible values.<br>`;
+
+    return textMessage;
 }

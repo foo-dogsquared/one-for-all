@@ -18,6 +18,9 @@ SE_LIST.addEventListener("onkeydown", (event) => {
 
 applySVG(DB_URL_SEARCH);
 
+if (localStorage.getItem(ONE_FOR_ALL_TOGGLE_DB_AT_START) === "true") 
+    localStorage.getItem(ONE_FOR_ALL_DEFAULT_DB) ? getListFromJSON(localStorage.getItem(ONE_FOR_ALL_DEFAULT_DB)) : getListFromJSON("./se-list.json");
+
 DB_URL_SEARCH.addEventListener("click", (event) => {
     retrieveJSON(DB_URL_INPUT);
 });
