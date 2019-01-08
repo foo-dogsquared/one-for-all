@@ -37,11 +37,23 @@ function setKeyword(command, wholestring = DB_URL_INPUT.value) {
 }
 
 function removeKeyword(command, wholestring = DB_URL_INPUT.value) {
-
+    
 }
 
 function setDefault(command, wholestring = DB_URL_INPUT.value) {
-    
+    const splitArguments = wholestring.split(/\s+/);
+    const commandIndex = splitArguments.indexOf(command);
+    const potentialArgument = splitArguments[commandIndex + 1];
+    let textMessage = "";
+    if (potentialArgument.match(urlRegex)) {
+        localStorage.setItem(ONE_FOR_ALL_DEFAULT_DB, potentialArgument);
+        textMessage += `<code style="font-size:1.1em;">${command}</code>: Default database is set at ${potentialArgument}.<br>`;
+    }
+    else if (potentialArgument === "clear") localStorage.removeItem(ONE_FOR_ALL_DEFAULT_DB);
+    else if (potentialArgument.match(/--\$\w+/) || !potentialArgument) textMessage += `<code style="font-size:1.1em;">${command}</code>: No value detected.<br>`;
+    else textMessage += `<code style="font-size:1.1em;">${command}</code>: Given value is invalid URL.<br>`;
+
+    return textMessage;
 }
 
 function toggleShowList(command, wholestring = DB_URL_INPUT.value) {
