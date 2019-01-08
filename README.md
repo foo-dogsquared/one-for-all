@@ -1,4 +1,8 @@
 # one-for-all
+[![HitCount](http://hits.dwyl.io/foo-dogsquared/one-for-all.svg)](http://hits.dwyl.io/foo-dogsquared/one-for-all)
+[![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](./LICENSE)
+![Version](https://img.shields.io/badge/version-1.1-brightgreen.svg)
+
 A single web page for most of the popular search engines.
 
 Well, not the one of the most elegant solution but it works and there are still some things I want to implement someday. So expect this to be improved... someday (still not close to elegance, though). 😂
@@ -50,3 +54,18 @@ You can fork this one and adjust the array of objects to whatever you desire. Ju
     - https://youtube.com/results?q=foo-dogsquared
     - https://gitlab.com/search?search=SEARCH_MRET 
     - https://caniuse.com/#search=SEARCH_TMER (has `"#"` as the value)
+
+### Additional features
+This is not much of a big feature, more like a hidden unfeatured stuff but I added what I like to call sets. You just type in a keyword in where the URL of the `se-list.json` is supposed to be inputted, then a specific JSON will be fetched. I like to develop features that revolves around it but I've been thinking about this as I go on with my other projects.
+
+For now, you can get my sets with the following keywords:
+- `book[s]`
+- `mooc[s]`
+
+The `s` part is optional and the word doesn't have to be in full lowercase. 
+
+After you type one of the keywords, a specific JSON will be fetched and you'll get a list that is related with the keyword, of course.
+
+#### To-do / User stories
+- the user can set some keywords to be associated with their `se-list.json` URL
+- multiple input cursor on different `<input>` in the list, similar to Visual Studio Code's multiple cursor
