@@ -2,11 +2,11 @@ function getListFromJSON(URL) {
     fetch(URL)
         .then(response => {
             console.log(`${response.url} is ${response.status} (${response.statusText})`)
-            if (response.status === 200) toggleStatusText(`Status ${response.status}: ${response.statusText} from <a href="${response.url}" style="color:black;text-decoration:underline;">${response.url}</a><br>`, DB_URL_STATUS)
-            else toggleStatusText(`Status ${response.status}: ${response.statusText}<br>`, DB_URL_STATUS)
-            return response;
+            if (response.status === 200) toggleStatusText(`Status ${response.status}: ${response.statusText} from <a href="${response.url}" style="color:black;text-decoration:underline;">${response.url}</a><br>`, DB_URL_STATUS);
+            else toggleStatusText(`Status ${response.status}: ${response.statusText}<br>`, DB_URL_STATUS);
+
+            return response.json();
         })
-        .then(response => response.json())
         .then(json => {
             const SE_DATA_LIST = json;
             SE_DATA_LIST.sort(sortID);
@@ -19,27 +19,35 @@ function getListFromJSON(URL) {
 function retrieveJSON(urlInputElement) {
     const commandParameterFormat = /--\$\w+/gi;
     const commandParameters = urlInputElement.value.match(commandParameterFormat);
-    if (commandParameters && commandParameters.length > 0) {
-        const inputCommands = urlInputElement.value.split(/\s+/);
+    if (urlInputElement.value.trim().match(/^\w+$/) && localStorage.getItem(`fds_one_for_all_keyword=${urlInputElement.value.trim()}`)) {
+        const keyword = `${ONE_FOR_ALL_KEYWORD_TEMPLATE}${urlInputElement.value.trim()}`;
+        const keyword_url = localStorage.getItem(keyword);
+        getListFromJSON(decodeURIComponent(keyword_url));
+        console.log("It is working.");
+    }
+    else if (commandParameters && commandParameters.length > 0) {
+        let statusTextMessage = "";
         const invalidCommands = [];
         for (const command of commandParameters) {
-            if (command === "--$set_keyword") setKeyword(command);
-            else if (command === "--$remove_keyword") removeKeyword(command);
-            else if (command === "--$default") setDefault(command);
-            else if (command === "--$show_list_at_start") toggleShowList(command); 
+            if (command === "--$set_keyword" || command === "--$set_keywords") statusTextMessage += setKeyword(command);
+            else if (command === "--$remove_keyword") statusTextMessage += removeKeyword(command);
+            else if (command === "--$default") statusTextMessage += setDefault(command);
+            else if (command === "--$show_list_at_start") statusTextMessage += toggleShowList(command); 
             else invalidCommands.push(command);
         }
 
-        if (invalidCommands.length > 0) {
-            let invalidStatusCommandText = "";
-            for (const command of invalidCommands) invalidStatusCommandText += `<span style="color:red">${command}</span> at index ${urlInputElement.value.indexOf(command)} is an invalid command.<br>`;
-            toggleStatusText(invalidStatusCommandText, DB_URL_STATUS);
-        }
+        if (invalidCommands.length > 0)
+            for (const command of invalidCommands) statusTextMessage += `<span style="color:red">${command}</span> at index ${urlInputElement.value.indexOf(command)} is an invalid command.<br>`;
+        toggleStatusText(statusTextMessage, DB_URL_STATUS);
     }
     else {
         const urlRegex = /^(https?|file|ftp)\:\/\/[\w|\W|\d]+[.][\w]+$/gi;
         const urlString = urlInputElement.value.match(urlRegex) ? new URL(urlInputElement.value) : new URL(document.URL);
-        if (urlString.href === document.URL && !urlInputElement.value.match(/\S/)) getListFromJSON("./se-list.json");
+        if (urlString.href === document.URL && !urlInputElement.value.match(/\S/)) {
+            const default_db = decodeURIComponent(localStorage.getItem(ONE_FOR_ALL_DEFAULT_DB));
+            if (default_db) getListFromJSON(default_db);
+            else getListFromJSON("./se-list.json");
+        }
         else if (urlString.href.split("/").pop().indexOf("se-list.json") === 0) {
             getListFromJSON(urlInputElement.value);
             urlInputElement.value = '';
@@ -48,7 +56,7 @@ function retrieveJSON(urlInputElement) {
 }
 
 function renderList(querylist, seListContainer, containerBox) {
-    if (!seListContainer) throw new Error("There's no container element that is being specified.");
+    if (!seListContainer) throw new Error("There's no container element that is being specified for the list.");
     while (seListContainer.firstElementChild) {seListContainer.removeChild(listNode.firstElementChild)}
     
     for (const listItem of querylist) {
