@@ -17,35 +17,35 @@ function getListFromJSON(URL) {
 } 
 
 function retrieveJSON(urlInputElement) {
-    const commandParameterFormat = /--\$\w+/gi;
-    const commandParameters = urlInputElement.value.match(commandParameterFormat);
-    if (urlInputElement.value.trim().match(/^\w+$/) && localStorage.getItem(`fds_one_for_all_keyword=${urlInputElement.value.trim()}`)) {
+    const commandParameterFormat = /--\$[\w-]+(?:="[\s\w\d-]+")?/g;
+    const commandParameters = new Set(urlInputElement.value.match(commandParameterFormat));
+    if (urlInputElement.value.trim().match(/^[A-Za-z0-9_-]+$/) && localStorage.getItem(`fds_one_for_all_keyword=${urlInputElement.value.trim()}`)) {
         const keyword = `${ONE_FOR_ALL_KEYWORD_TEMPLATE}${urlInputElement.value.trim()}`;
         const keyword_url = localStorage.getItem(keyword);
         getListFromJSON(decodeURIComponent(keyword_url));
         console.log("It is working.");
     }
-    else if (commandParameters && commandParameters.length > 0) {
+    else if (commandParameters && commandParameters.size > 0) {
         let statusTextMessage = "";
         const invalidCommands = [];
         for (const command of commandParameters) {
-            if (command === "--$set_keyword" || command === "--$set_keywords") statusTextMessage += setKeyword(command);
-            else if (command === "--$remove_keyword") statusTextMessage += removeKeyword(command);
+            if (command === "--$set-keyword" || command === "--$set-keywords") statusTextMessage += setKeyword(command);
+            else if (command === "--$remove-keyword" || command === "--$remove-keywords" || command === "--$rm-keywords" || command === "--$rm-keyword") statusTextMessage += removeKeyword(command);
             else if (command === "--$default") statusTextMessage += setDefault(command);
-            else if (command === "--$show_list_at_start") statusTextMessage += toggleShowList(command); 
+            else if (command === "--$show-list-at-start" || command === "--$slas") statusTextMessage += toggleShowList(command); 
             else invalidCommands.push(command);
         }
 
         if (invalidCommands.length > 0)
-            for (const command of invalidCommands) statusTextMessage += `<span style="color:red">${command}</span> at index ${urlInputElement.value.indexOf(command)} is an invalid command.<br>`;
+            for (const command of invalidCommands) statusTextMessage += formatCommandTextMessage(command, `at index ${urlInputElement.value.indexOf(command)} is an invalid command.`, "error");
         toggleStatusText(statusTextMessage, DB_URL_STATUS);
     }
     else {
         const urlRegex = /^(https?|file|ftp)\:\/\/[\w|\W|\d]+[.][\w]+$/gi;
         const urlString = urlInputElement.value.match(urlRegex) ? new URL(urlInputElement.value) : new URL(document.URL);
         if (urlString.href === document.URL && !urlInputElement.value.match(/\S/)) {
-            const default_db = decodeURIComponent(localStorage.getItem(ONE_FOR_ALL_DEFAULT_DB));
-            if (default_db) getListFromJSON(default_db);
+            const default_db = localStorage.getItem(ONE_FOR_ALL_DEFAULT_DB);
+            if (default_db) getListFromJSON(decodeURIComponent(default_db));
             else getListFromJSON("./se-list.json");
         }
         else if (urlString.href.split("/").pop().indexOf("se-list.json") === 0) {
