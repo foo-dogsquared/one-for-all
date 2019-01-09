@@ -12,3 +12,13 @@ function sortID(current, next) {
     else if (current.id < next.id) return -1
     else return 0;
 }
+
+function openSearchPage(nodeTarget) {
+    const searchEngineDiv = nodeTarget.parentNode;
+    const listItemURL = searchEngineDiv.getAttribute("se-url");
+    const listItemHash = searchEngineDiv.getAttribute("se-url-hash");
+    const listItemParam = searchEngineDiv.getAttribute("se-url-param");
+    const FULLSEARCH_URL = encodeURI(`${listItemURL}${listItemHash}${listItemParam}=${nodeTarget.value}`);
+    window.open(FULLSEARCH_URL, "_blank");
+    nodeTarget.value = "";
+}

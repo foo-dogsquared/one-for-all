@@ -13,19 +13,19 @@ function setKeyword(command, wholestring = DB_URL_INPUT.value) {
     const potentialArguments = splitArguments.slice(commandIndex + 1);
     let textMessage = "";
     const validArgumentList = [];
-    const urlRegex = /^(https?|file|ftp)\:\/\/[\w|\W|\d]+[.][\w]+$/gi;
+    const urlRegex = /^(https?|file|ftp)\:\/\/[\w|\W|\d]+(\..+?)$/i;
     for (const argument of potentialArguments) {
-        const validArgument = argument.match(/([A-Za-z0-9_-])=\"(.+)\"/);
+        const validArgument = argument.match(/([A-Za-z0-9_-]+)=\"(.+)\"/);
         const potentialCommandParameter = argument.match(/--\$\w+/);
         if (!validArgument && !potentialCommandParameter)
-            textMessage += formatCommandTextMessage(command,`Invalid argument format given at index ${wholestring.indexOf(argument)}.`);
-        else if (potentialCommandParameter) {
-            break;
-        }
+        textMessage += formatCommandTextMessage(command,`Invalid argument format given at index ${wholestring.indexOf(argument)}.`);
+        else if (potentialCommandParameter) {break;}
         else {
-            if (!validArgument[2].match(urlRegex)) textMessage += formatCommandTextMessage(command,`Given argument value of ${validArgument[1]} is not a valid URL.`);
+            const validUrl = validArgument[2].match(urlRegex);
+            if (!validUrl) textMessage += formatCommandTextMessage(command,`Given argument value of <u>${validArgument[1]}</u> is not a valid URL.`);
             else {
-                textMessage += formatCommandTextMessage(command,`Keyword <u>${validArgument[1]}</u> has been ${(localStorage.getItem(ONE_FOR_ALL_KEYWORD_TEMPLATE + encodeURIComponent(validArgument[1]))) ? "replaced" : "added"} with the value <u>${validArgument[2]}</u>.`);
+                if (validUrl[2] === ".json") textMessage += formatCommandTextMessage(command,`Keyword <u>${validArgument[1]}</u> has been ${(localStorage.getItem(ONE_FOR_ALL_KEYWORD_TEMPLATE + encodeURIComponent(validArgument[1]))) ? "replaced" : "added"} with the value <u>${validArgument[2]}</u>.`);
+                else textMessage += formatCommandTextMessage(command, `URL given with keyword <u>${validArgument[1]}</u> does not direct to a JSON file.`);
                 localStorage.setItem(`${ONE_FOR_ALL_KEYWORD_TEMPLATE}${encodeURIComponent(validArgument[1])}`, encodeURIComponent(validArgument[2]));
             }
             validArgumentList.push(validArgument);
@@ -46,7 +46,6 @@ function removeKeyword(command, wholestring = DB_URL_INPUT.value) {
     for (const argument of potentialArguments) {
         const potentialCommandParameter = argument.match(/--\$\w+/);
         const keywordArray = argument.match(/\[.+?\]/);
-        console.log(keywordArray);
         if (!argument || potentialCommandParameter) break;
         else if (keywordArray) {
             const keywordsStr = keywordArray.join();
@@ -83,19 +82,22 @@ function setDefault(command, wholestring = DB_URL_INPUT.value) {
     const splitArguments = wholestring.split(/\s+/);
     const commandIndex = splitArguments.indexOf(command);
     const potentialArgument = splitArguments[commandIndex + 1];
-    const urlRegex = /^(https?|file|ftp)\:\/\/[\w|\W|\d]+[.][\w]+$/gi;
+    const urlRegex = /^(https?|file|ftp)\:\/\/[\w|\W|\d]+(\..+?)$/i;
     let textMessage = "";
     if (!potentialArgument || potentialArgument.match(/--\$\w+/) ) textMessage += formatCommandTextMessage(command,`No value detected.`);
     else if (potentialArgument.match(urlRegex)) {
-        localStorage.setItem(ONE_FOR_ALL_DEFAULT_DB, potentialArgument);
-        textMessage += formatCommandTextMessage(command,`Default database is set at ${potentialArgument}.`);
+        if (potentialArgument.match(urlRegex)[2] === ".json") {
+            localStorage.setItem(ONE_FOR_ALL_DEFAULT_DB, potentialArgument);
+            textMessage += formatCommandTextMessage(command,`Default database is set at ${potentialArgument}.`);
+        } 
+        else textMessage += formatCommandTextMessage(command, `URL given does not direct to a JSON file.`);
     }
     else if (potentialArgument === "-clear") {
         if (localStorage.getItem(ONE_FOR_ALL_DEFAULT_DB)) {
             localStorage.removeItem(ONE_FOR_ALL_DEFAULT_DB);
-            textMessage += formatCommandTextMessage(command, `: Default database setting is cleared. Default database URL is at "./se-list.json".`);
+            textMessage += formatCommandTextMessage(command, `Default database setting is cleared. Default database URL is at "./se-list.json".`);
         } 
-        else textMessage += formatCommandTextMessage(command, `: There is no default database stored.`);
+        else textMessage += formatCommandTextMessage(command, `There is no default database stored.`);
     }
     else textMessage += formatCommandTextMessage(command,`Given value is invalid URL.`);
 
