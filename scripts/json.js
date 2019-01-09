@@ -19,18 +19,17 @@ function getListFromJSON(URL) {
 function retrieveJSON(urlInputElement) {
     const commandParameterFormat = /--\$[\w-]+(?:="[\s\w\d-]+")?/g;
     const commandParameters = new Set(urlInputElement.value.match(commandParameterFormat));
-    if (urlInputElement.value.trim().match(/^[A-Za-z0-9_-]+$/) && localStorage.getItem(`fds_one_for_all_keyword=${urlInputElement.value.trim()}`)) {
+    if (urlInputElement.value.trim().match(/^[A-Za-z0-9_-]+$/) && localStorage.getItem(`${ONE_FOR_ALL_KEYWORD_TEMPLATE}${urlInputElement.value.trim()}`)) {
         const keyword = `${ONE_FOR_ALL_KEYWORD_TEMPLATE}${urlInputElement.value.trim()}`;
         const keyword_url = localStorage.getItem(keyword);
         getListFromJSON(decodeURIComponent(keyword_url));
-        console.log("It is working.");
     }
     else if (commandParameters && commandParameters.size > 0) {
         let statusTextMessage = "";
         const invalidCommands = [];
         for (const command of commandParameters) {
-            if (command === "--$set-keyword" || command === "--$set-keywords") statusTextMessage += setKeyword(command);
-            else if (command === "--$remove-keyword" || command === "--$remove-keywords" || command === "--$rm-keywords" || command === "--$rm-keyword") statusTextMessage += removeKeyword(command);
+            if (command === "--$set-keyword" || command === "--$set-keywords" || command === "--$set-kw" || command === "--$set-kws") statusTextMessage += setKeyword(command);
+            else if (command === "--$remove-keyword" || command === "--$remove-keywords" || command === "--$rm-keywords" || command === "--$rm-keyword" || command === "--$rm-kw" || command === "--$rm-kws") statusTextMessage += removeKeyword(command);
             else if (command === "--$default") statusTextMessage += setDefault(command);
             else if (command === "--$show-list-at-start" || command === "--$slas") statusTextMessage += toggleShowList(command); 
             else invalidCommands.push(command);
@@ -53,24 +52,20 @@ function retrieveJSON(urlInputElement) {
             urlInputElement.value = '';
         } else toggleStatusText(`URL should be in the following format:<br><pre>[http | https | file | ftp]://[URL | file path]/se-list.json</pre>`, DB_URL_STATUS);
     }
+
+    if (urlInputElement.value) {
+        if (COMMAND_HISTORY.length > 50) COMMAND_HISTORY.shift();
+        COMMAND_HISTORY.unshift(urlInputElement.value);
+        HISTORY_CURSOR = -1;
+    }
+    urlInputElement.value = "";
 }
 
 function renderList(querylist, seListContainer, containerBox) {
     if (!seListContainer) throw new Error("There's no container element that is being specified for the list.");
-    while (seListContainer.firstElementChild) {seListContainer.removeChild(listNode.firstElementChild)}
+    while (seListContainer.firstElementChild) {seListContainer.removeChild(seListContainer.firstElementChild)}
     
     for (const listItem of querylist) {
-        function openSearchPage(event) {
-            const TARGET_INPUT = document.querySelector(`input#${listItem.id}`);
-
-            if (TARGET_INPUT.value.match(/\S/gi)) {
-                const FULLSEARCH_URL = encodeURI(`${listItem.url}${listItem.hash ? listItem.hash : "?"}${listItem.param ? listItem.param : "q"}=${TARGET_INPUT.value}`);
-                console.log(FULLSEARCH_URL);
-                window.open(FULLSEARCH_URL, "_blank");
-                TARGET_INPUT.value = '';
-            } else event.preventDefault();
-        }
-
         if (listItem.hasOwnProperty("id") && listItem.hasOwnProperty("url")) {
             const SE_LIST_ITEM = document.createElement("li");
             SE_LIST_ITEM.setAttribute("class", "search-engine");
@@ -82,21 +77,20 @@ function renderList(querylist, seListContainer, containerBox) {
 
             const SE_INPUT_ITEM = document.createElement("div");
             SE_INPUT_ITEM.setAttribute("class", "search-engine-input-item");
+            SE_INPUT_ITEM.setAttribute("se-url", listItem.url);
+            SE_INPUT_ITEM.setAttribute("se-url-hash", (listItem.hash) ? listItem.hash : "?");
+            SE_INPUT_ITEM.setAttribute("se-url-param", (listItem.param) ? listItem.param : "q");
 
             const SE_INPUT = document.createElement("input");
             SE_INPUT.setAttribute("class", "search-engine-input");
             SE_INPUT.setAttribute("id", listItem.id);
             SE_INPUT.setAttribute("tabindex", 3);
-            SE_INPUT.addEventListener("keypress", (event) => {
-                if (event.key === "Enter") openSearchPage(event)
-            })
             SE_INPUT.addEventListener("focus", () => DB_URL_STATUS.textContent = '');
 
             const SE_INPUT_BTN = document.createElement("button");
             SE_INPUT_BTN.setAttribute("type", "button");
             SE_INPUT_BTN.setAttribute("class", "search-engine-input-button");
             applySVG(SE_INPUT_BTN)
-            SE_INPUT_BTN.addEventListener("click", openSearchPage);
 
             // placed here for easier view of hierarchy of things
             SE_INPUT_ITEM.appendChild(SE_INPUT);

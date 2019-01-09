@@ -7,12 +7,30 @@ const SE_LIST = document.querySelector("ul#search-list");
 const DB_URL_INPUT = document.querySelector("#dbUrlInput");
 const DB_URL_SEARCH = document.querySelector("#dbUrlSearch");
 const DB_URL_STATUS = document.querySelector("#dbURLStatus");
-    
-SE_LIST.addEventListener("onkeydown", (event) => {
+
+const COMMAND_HISTORY = [];
+let HISTORY_CURSOR = -1;
+
+SE_LIST.addEventListener("keypress", (event) => {
     const target = event.target;
 
-    if (target.tagName === "INPUT" && event.key === "Enter") {
-        console.log(target);
+    if (target.tagName === "INPUT" && event.key === "Enter" && target.parentNode.tagName === "DIV" && target.parentNode.classList.contains("search-engine-input-item") && target.value.match(/\S/gi))
+        openSearchPage(target);
+});
+
+SE_LIST.addEventListener("click", (event) => {
+    const target = event.target;
+
+    if (target.tagName === "BUTTON" && target.previousSibling.tagName === "INPUT" && target.previousSibling.classList.contains("search-engine-input") && target.previousSibling.value.match(/\S/gi))
+        openSearchPage(target.previousSibling);
+})
+
+DB_URL_INPUT.addEventListener("keypress", function(event) {
+    if (event.key === "ArrowDown" && COMMAND_HISTORY.length > 0) {
+        DB_URL_INPUT.value = COMMAND_HISTORY[HISTORY_CURSOR = (HISTORY_CURSOR > 0) ? --HISTORY_CURSOR % COMMAND_HISTORY.length : COMMAND_HISTORY.length - 1];
+    }
+    else if (event.key === "ArrowUp" && COMMAND_HISTORY.length > 0) {
+        DB_URL_INPUT.value = COMMAND_HISTORY[HISTORY_CURSOR = ++HISTORY_CURSOR % COMMAND_HISTORY.length];
     }
 })
 
