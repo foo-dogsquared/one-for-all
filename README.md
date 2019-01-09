@@ -31,11 +31,10 @@ If you need to install it for some reason (I won't judge but ok), you can simply
 No need for install libraries or anything &mdash; except for the devtools which is listed in `package.json`, if you want to have an easier time debugging these shiiiiiiinanigans.
 
 ## Features
-### Configurable list
+### [Configurable list](./docs/json-search-engine-list.md)
 One of the biggest features of `one-for-all` is you can make your own list of search engine. Just head on over [here](./docs/json-search-engine-list.md) to know how does it work and what are the required valid data for it.
 
-<!-- TODO: Write the docs of the commands -->
-### Optional commands
+### [Optional commands](./docs/available-commands.md)
 You can do the following commands in the main `<input>` element as if you're using a CLI program. You can view the available commands over [here](./docs/available-commands.md). A GUI version (thus, user-friendly) of them will be implemented Soon™.
 
 ## To-do / User stories
