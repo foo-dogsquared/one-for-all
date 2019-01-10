@@ -112,7 +112,7 @@ function toggleShowList(command, wholestring = DB_URL_INPUT.value) {
     if (!potentialArgument) textMessage += formatCommandTextMessage(command, `No value detected.`);
     else if (potentialArgument === "true" || potentialArgument === "false") {
         localStorage.setItem(ONE_FOR_ALL_TOGGLE_DB_AT_START, potentialArgument);
-        textMessage += formatCommandTextMessage(command,`Toggling retrieving databases at start is ${(potentialArgument === "true") ? "enabled" : "disabled"}.`);
+        textMessage += formatCommandTextMessage(command,`Toggling retrieving databases at start is ${(potentialArgument === "true") ? "enabled. The effects of enabling this setting will take effect in the next visit (or reload)" : "disabled"}.`);
     }
     else if (potentialArgument.match(/#[A-Za-z0-9_-]+/) || !potentialArgument) textMessage += formatCommandTextMessage(command,`No value detected.`);
     else textMessage += formatCommandTextMessage(command,`Toggling database at start only have <code>true</code> and <code>false</code> as possible values.`);
@@ -125,9 +125,12 @@ function showKeywords(command, wholestring = DB_URL_INPUT.value) {
     const commandIndex = splitArguments.indexOf(command);
     const potentialArgument = splitArguments[commandIndex + 1];
     let textMessage = "";
-    for (const item in localStorage) {
-        if (item.indexOf(ONE_FOR_ALL_KEYWORD_TEMPLATE) !== -1) textMessage += formatCommandTextMessage(command, `<b style="font-size:1.2em;">${item.substr(ONE_FOR_ALL_KEYWORD_TEMPLATE.length)}</b> ${(potentialArgument === "-keyword") ? "" : "- <i style=\"font-size:1.1em;\">" + decodeURIComponent(localStorage.getItem(item)) + "</i>"}`);
+    if (potentialArgument !== "-default") {
+        for (const item in localStorage) {
+            if (item.indexOf(ONE_FOR_ALL_KEYWORD_TEMPLATE) !== -1) textMessage += formatCommandTextMessage(command, `<b style="font-size:1.2em;">${item.substr(ONE_FOR_ALL_KEYWORD_TEMPLATE.length)}</b> ${(potentialArgument === "-keyword") ? "" : "- <i style=\"font-size:1.1em;\">" + decodeURIComponent(localStorage.getItem(item)) + "</i>"}`);
+        }
     }
+    else textMessage += formatCommandTextMessage(command, `<span style="font-size:1.1em">${(localStorage.getItem(ONE_FOR_ALL_DEFAULT_DB)) ? "Default database: <i>" + localStorage.getItem(ONE_FOR_ALL_DEFAULT_DB) + "</i>" : "You did not set a user-defined default database yet so you get './se-list.json'."}</span>`);
 
     if (!textMessage) textMessage = formatCommandTextMessage(command, `No keywords have been set yet.`);
 
