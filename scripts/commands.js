@@ -5,7 +5,7 @@ const ONE_FOR_ALL_DEFAULT_DB = `fds_one-for-all_default_db`;
 const ONE_FOR_ALL_TOGGLE_DB_AT_START = `fds_one-for-all_toggle_db_at_start`;
 const urlRegex = /(?:https?|file|ftp)\:\/\/[\w|\W|\d]+[.][\w]+/;
 
-function formatCommandTextMessage(commandName, message, status = "text") {return `<code style="${(status === "error") ? "color:red" : "color:black"};font-size:1.1em;">${commandName}</code>: ${message}<br>`;}
+function formatCommandTextMessage(commandName, message, status = "text") {return `<div style="text-align:left;margin-bottom:.4em"><code class="status-command-name" style="${(status === "error") ? "color:red" : "color:black"};font-size:1.1em;">${commandName}</code>: ${message}</div>`;}
 
 function setKeyword(command, wholestring = DB_URL_INPUT.value) {
     const splitArguments = wholestring.split(/\s+/);
@@ -16,7 +16,7 @@ function setKeyword(command, wholestring = DB_URL_INPUT.value) {
     const urlRegex = /^(https?|file|ftp)\:\/\/[\w|\W|\d]+(\..+?)$/i;
     for (const argument of potentialArguments) {
         const validArgument = argument.match(/([A-Za-z0-9_-]+)=\"(.+)\"/);
-        const potentialCommandParameter = argument.match(/--\$\w+/);
+        const potentialCommandParameter = argument.match(/#[A-Za-z0-9_-]+/);
         if (!validArgument && !potentialCommandParameter)
         textMessage += formatCommandTextMessage(command,`Invalid argument format given at index ${wholestring.indexOf(argument)}.`);
         else if (potentialCommandParameter) {break;}
@@ -44,7 +44,7 @@ function removeKeyword(command, wholestring = DB_URL_INPUT.value) {
     let textMessage = "";
     const validArgumentList = [];
     for (const argument of potentialArguments) {
-        const potentialCommandParameter = argument.match(/--\$\w+/);
+        const potentialCommandParameter = argument.match(/#[A-Za-z0-9_-]+/);
         const keywordArray = argument.match(/\[.+?\]/);
         if (!argument || potentialCommandParameter) break;
         else if (keywordArray) {
@@ -114,8 +114,22 @@ function toggleShowList(command, wholestring = DB_URL_INPUT.value) {
         localStorage.setItem(ONE_FOR_ALL_TOGGLE_DB_AT_START, potentialArgument);
         textMessage += formatCommandTextMessage(command,`Toggling retrieving databases at start is ${(potentialArgument === "true") ? "enabled" : "disabled"}.`);
     }
-    else if (potentialArgument.match(/--\$\w+/) || !potentialArgument) textMessage += formatCommandTextMessage(command,`No value detected.`);
+    else if (potentialArgument.match(/#[A-Za-z0-9_-]+/) || !potentialArgument) textMessage += formatCommandTextMessage(command,`No value detected.`);
     else textMessage += formatCommandTextMessage(command,`Toggling database at start only have <code>true</code> and <code>false</code> as possible values.`);
+
+    return textMessage;
+}
+
+function showKeywords(command, wholestring = DB_URL_INPUT.value) {
+    const splitArguments = wholestring.split(/\s+/);
+    const commandIndex = splitArguments.indexOf(command);
+    const potentialArgument = splitArguments[commandIndex + 1];
+    let textMessage = "";
+    for (const item in localStorage) {
+        if (item.indexOf(ONE_FOR_ALL_KEYWORD_TEMPLATE) !== -1) textMessage += formatCommandTextMessage(command, `<b style="font-size:1.2em;">${item.substr(ONE_FOR_ALL_KEYWORD_TEMPLATE.length)}</b> ${(potentialArgument === "-keyword") ? "" : "- <i style=\"font-size:1.1em;\">" + decodeURIComponent(localStorage.getItem(item)) + "</i>"}`);
+    }
+
+    if (!textMessage) textMessage = formatCommandTextMessage(command, `No keywords have been set yet.`);
 
     return textMessage;
 }
