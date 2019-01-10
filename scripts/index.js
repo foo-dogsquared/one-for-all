@@ -23,7 +23,7 @@ SE_LIST.addEventListener("click", (event) => {
 
     if (target.tagName === "BUTTON" && target.previousSibling.tagName === "INPUT" && target.previousSibling.classList.contains("search-engine-input") && target.previousSibling.value.match(/\S/gi))
         openSearchPage(target.previousSibling);
-})
+});
 
 DB_URL_INPUT.addEventListener("keypress", function(event) {
     if (event.key === "ArrowDown" && COMMAND_HISTORY.length > 0) {
@@ -32,7 +32,7 @@ DB_URL_INPUT.addEventListener("keypress", function(event) {
     else if (event.key === "ArrowUp" && COMMAND_HISTORY.length > 0) {
         DB_URL_INPUT.value = COMMAND_HISTORY[HISTORY_CURSOR = ++HISTORY_CURSOR % COMMAND_HISTORY.length];
     }
-})
+});
 
 applySVG(DB_URL_SEARCH);
 

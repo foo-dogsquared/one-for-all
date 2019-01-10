@@ -1,4 +1,5 @@
 function getListFromJSON(URL) {
+    toggleStatusText(`Retrieving JSON database from <u>${URL}</u>.`, DB_URL_STATUS);
     fetch(URL)
         .then(response => {
             console.log(`${response.url} is ${response.status} (${response.statusText})`)
@@ -17,21 +18,30 @@ function getListFromJSON(URL) {
 } 
 
 function retrieveJSON(urlInputElement) {
-    const commandParameterFormat = /--\$[\w-]+(?:="[\s\w\d-]+")?/g;
+    const commandParameterFormat = /#[A-Za-z0-9_-]+(?:="[\s\w\d-]+")?/g;
+    const urlRegex = /^\s*(https?|file|ftp)\:\/\/[\w|\W|\d]+[.][\w]+$/gi;
     const commandParameters = new Set(urlInputElement.value.match(commandParameterFormat));
     if (urlInputElement.value.trim().match(/^[A-Za-z0-9_-]+$/) && localStorage.getItem(`${ONE_FOR_ALL_KEYWORD_TEMPLATE}${urlInputElement.value.trim()}`)) {
         const keyword = `${ONE_FOR_ALL_KEYWORD_TEMPLATE}${urlInputElement.value.trim()}`;
         const keyword_url = localStorage.getItem(keyword);
         getListFromJSON(decodeURIComponent(keyword_url));
     }
+    else if (urlInputElement.value.match(urlRegex)) {
+        const urlString = new URL(urlInputElement.value);
+        if (urlString.href.split("/").pop().indexOf(".json") >= 0) {
+            getListFromJSON(urlInputElement.value);
+        } 
+        else toggleStatusText(`URL should be in the following format:<br><pre>[http | https | file | ftp]://[URL | file path]/se-list.json</pre>`, DB_URL_STATUS);
+    }
     else if (commandParameters && commandParameters.size > 0) {
         let statusTextMessage = "";
         const invalidCommands = [];
         for (const command of commandParameters) {
-            if (command === "--$set-keyword" || command === "--$set-keywords" || command === "--$set-kw" || command === "--$set-kws") statusTextMessage += setKeyword(command);
-            else if (command === "--$remove-keyword" || command === "--$remove-keywords" || command === "--$rm-keywords" || command === "--$rm-keyword" || command === "--$rm-kw" || command === "--$rm-kws") statusTextMessage += removeKeyword(command);
-            else if (command === "--$default") statusTextMessage += setDefault(command);
-            else if (command === "--$show-list-at-start" || command === "--$slas") statusTextMessage += toggleShowList(command); 
+            if (command === "#set-keyword" || command === "#set-keywords" || command === "#set-kw" || command === "#set-kws" || command === "#set-alias") statusTextMessage += setKeyword(command);
+            else if (command === "#remove-keyword" || command === "#remove-keywords" || command === "#rm-keywords" || command === "#rm-keyword" || command === "#rm-kw" || command === "#rm-kws" || command === "#rm-alias") statusTextMessage += removeKeyword(command);
+            else if (command === "#show-keywords" || command === "#show-keyword" || command === "#show-kw" || command === "#show-kws" || command === "#show-alias" || command === "#ls") statusTextMessage += showKeywords(command); 
+            else if (command === "#default") statusTextMessage += setDefault(command);
+            else if (command === "#show-list-at-start" || command === "#slas") statusTextMessage += toggleShowList(command);
             else invalidCommands.push(command);
         }
 
@@ -40,17 +50,11 @@ function retrieveJSON(urlInputElement) {
         toggleStatusText(statusTextMessage, DB_URL_STATUS);
     }
     else {
-        const urlRegex = /^(https?|file|ftp)\:\/\/[\w|\W|\d]+[.][\w]+$/gi;
-        const urlString = urlInputElement.value.match(urlRegex) ? new URL(urlInputElement.value) : new URL(document.URL);
-        if (urlString.href === document.URL && !urlInputElement.value.match(/\S/)) {
+        if (!urlInputElement.value) {
             const default_db = localStorage.getItem(ONE_FOR_ALL_DEFAULT_DB);
             if (default_db) getListFromJSON(decodeURIComponent(default_db));
             else getListFromJSON("./se-list.json");
         }
-        else if (urlString.href.split("/").pop().indexOf("se-list.json") === 0) {
-            getListFromJSON(urlInputElement.value);
-            urlInputElement.value = '';
-        } else toggleStatusText(`URL should be in the following format:<br><pre>[http | https | file | ftp]://[URL | file path]/se-list.json</pre>`, DB_URL_STATUS);
     }
 
     if (urlInputElement.value) {
