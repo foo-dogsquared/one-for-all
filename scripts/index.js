@@ -18,6 +18,22 @@ SE_LIST.addEventListener("keypress", (event) => {
         openSearchPage(target);
 });
 
+SE_LIST.addEventListener("input", (event) => {
+    const target = event.target;
+    if (target.tagName === "INPUT" && target.parentNode.tagName === "DIV" && target.parentNode.classList.contains("search-engine-input-item") && target.value.match(/\S/gi)) {
+        const hash = target.parentNode.getAttribute("se-url-hash");
+        const url = target.parentNode.getAttribute("se-url");
+        const param = target.parentNode.getAttribute("se-url-param");
+        target.parentNode.parentNode.querySelector(".search-engine-href").textContent = `${url}${hash}${param}=${encodeURIComponent(target.value)}`;
+    }
+    else if (target.tagName === "INPUT" && target.parentNode.tagName === "DIV" && target.parentNode.classList.contains("search-engine-input-item") && !target.value) {
+        const hash = target.parentNode.getAttribute("se-url-hash");
+        const url = target.parentNode.getAttribute("se-url");
+        const param = target.parentNode.getAttribute("se-url-param");
+        target.parentNode.parentNode.querySelector(".search-engine-href").textContent = `${url}${hash}${param}=SEARCH_VALUE`;
+    }
+})
+
 SE_LIST.addEventListener("click", (event) => {
     const target = event.target;
 

@@ -170,3 +170,8 @@ div.search-engine-input-item {
   cursor: pointer;
   background: #f1bcab;
 }
+
+.search-engine-href {
+  font-size: 0.8em;
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}

@@ -96,12 +96,17 @@ function renderList(querylist, seListContainer, containerBox) {
             SE_INPUT_BTN.setAttribute("class", "search-engine-input-button");
             applySVG(SE_INPUT_BTN)
 
+            const SE_HREF = document.createElement("div");
+            SE_HREF.setAttribute("class", "search-engine-href");
+            SE_HREF.textContent = `${listItem.url}${(listItem.hash) ? listItem.hash : "?"}${(listItem.param) ? listItem.param : "q"}=SEARCH_VALUE`;
+
             // placed here for easier view of hierarchy of things
             SE_INPUT_ITEM.appendChild(SE_INPUT);
             SE_INPUT_ITEM.appendChild(SE_INPUT_BTN);
 
             SE_LIST_ITEM.appendChild(SE_NAME_HEADER);
             SE_LIST_ITEM.appendChild(SE_INPUT_ITEM);
+            SE_LIST_ITEM.appendChild(SE_HREF);
 
             seListContainer.appendChild(SE_LIST_ITEM);
         } else if (listItem.hasOwnProperty("id") && !listItem.hasOwnProperty("url")) {console.log(`Object #${listItem + 1} with ID ${listItem.id} does not have a URL field.`)}
