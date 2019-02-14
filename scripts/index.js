@@ -26,7 +26,7 @@ SE_LIST.addEventListener("input", (event) => {
         const param = target.parentNode.getAttribute("se-url-param");
         const urlText = target.parentNode.parentNode.querySelector(".search-engine-href");
         if (target.value.match(/\S/gi)) urlText.textContent = `${url}${hash}${param}=${encodeURIComponent(target.value)}`;
-        else urlText.textContent = `${url}${hash}${param}=SEARCH_VALUE`;
+        else if (target.value.match(/\s/gi) || !target.value) urlText.textContent = `${url}${hash}${param}=SEARCH_VALUE`;
     }
 })
 
@@ -37,13 +37,14 @@ SE_LIST.addEventListener("click", (event) => {
         openSearchPage(target.previousSibling);
 });
 
-DB_URL_INPUT.addEventListener("keypress", function(event) {
+DB_URL_INPUT.addEventListener("keydown", function(event) {
     if (event.key === "ArrowDown" && COMMAND_HISTORY.length > 0) {
         DB_URL_INPUT.value = COMMAND_HISTORY[HISTORY_CURSOR = (HISTORY_CURSOR > 0) ? --HISTORY_CURSOR % COMMAND_HISTORY.length : COMMAND_HISTORY.length - 1];
     }
     else if (event.key === "ArrowUp" && COMMAND_HISTORY.length > 0) {
         DB_URL_INPUT.value = COMMAND_HISTORY[HISTORY_CURSOR = ++HISTORY_CURSOR % COMMAND_HISTORY.length];
     }
+    else if (event.key === "Enter") retrieveJSON(DB_URL_INPUT);
 });
 
 applySVG(DB_URL_SEARCH);
@@ -53,7 +54,4 @@ if (localStorage.getItem(ONE_FOR_ALL_TOGGLE_DB_AT_START) === "true")
 
 DB_URL_SEARCH.addEventListener("click", (event) => {
     retrieveJSON(DB_URL_INPUT);
-});
-DB_URL_INPUT.addEventListener("keypress", (event) => {
-    if (event.key === "Enter") retrieveJSON(DB_URL_INPUT);
 });
